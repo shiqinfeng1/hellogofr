@@ -27,3 +27,7 @@ func Add(in goai.AddInput) error {
 func String() string {
 	return oai.String()
 }
+
+func Bytes() []byte {
+	return []byte(oai.String())
+}
