@@ -6,8 +6,7 @@ import (
 	"gofr.dev/pkg/gofr"
 )
 
-func DoHello(ctx *gofr.Context) (interface{}, error) {
-	var req v1.GetConfigReq
-	ctx.Bind(&req)
-	return "Hello World!", nil
+func GetConfig(ctx *gofr.Context, req *v1.GetConfigReq) (*v1.GetConfigRes, error) {
+	// todo anything
+	return &v1.GetConfigRes{}, nil
 }

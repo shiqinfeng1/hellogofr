@@ -1,10 +1,7 @@
 package server
 
 import (
-	v1 "hellogofr/api/restful/hello/v1"
 	"hellogofr/internal/hello/server/restful"
-	"hellogofr/pkg/openapi"
-	"hellogofr/pkg/response"
 	"hellogofr/pkg/route"
 
 	"gofr.dev/pkg/gofr"
@@ -13,13 +10,11 @@ import (
 func New() *gofr.App {
 	app := gofr.New()
 
-	// register openapi
-	app.GET("/openapi.json", func(ctx *gofr.Context) (interface{}, error) {
-		return response.Json(openapi.Bytes()), nil
-	})
+	// register api for openapi
+	route.BindOpenapiHandler(app)
 
-	// register http api
-	route.BindHandler[v1.GetConfigReq, v1.GetConfigRes](app, restful.DoHello)
+	// register http api and initialize openapi
+	route.BindHandler(app, restful.GetConfig)
 
 	return app
 }

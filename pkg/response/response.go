@@ -10,7 +10,7 @@ type resp struct {
 	Data any    `json:"data"`
 }
 
-func Json(b []byte) response.File {
+func File(b []byte) response.File {
 	return response.File{Content: b, ContentType: "application/json"}
 }
 
