@@ -1,8 +1,12 @@
+// Copyright @2025-2028 <SieYuan> . All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package server
 
 import (
-	"hellogofr/internal/hello/server/restful"
-	"hellogofr/pkg/route"
+	"github.com/shiqinfeng1/hellogofr/internal/hello/server/restful"
+	"github.com/shiqinfeng1/hellogofr/pkg/route"
 
 	"gofr.dev/pkg/gofr"
 )

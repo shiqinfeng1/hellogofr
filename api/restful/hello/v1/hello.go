@@ -1,3 +1,7 @@
+// Copyright @2025-2028 <SieYuan> . All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package v1
 
 import "github.com/gogf/gf/v2/frame/g"
@@ -11,6 +15,7 @@ type IsAutoUpdateRes struct {
 }
 type GetConfigReq struct {
 	g.Meta `path:"/version/configures" tags:"版本管理" method:"post" summary:"查询是否自动更新"`
+	Ver    bool `p:"ver" v:"required" dc:"配置的版本号"`
 }
 type GetConfigRes struct {
 	g.Meta     `mime:"application/json"`
