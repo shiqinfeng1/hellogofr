@@ -14,9 +14,10 @@ import (
 func New() *gofr.App {
 	app := gofr.New()
 
+	// app.UseMiddleware(response.UpdatePostStatusCode())
+
 	// register api for openapi
 	route.BindOpenapiHandler(app)
-
 	// register http api and initialize openapi
 	route.BindHandler(app, restful.GetConfig)
 

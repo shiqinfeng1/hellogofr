@@ -9,9 +9,10 @@ import (
 )
 
 type resp struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-	Data any    `json:"data"`
+	Code   int    `json:"code"`
+	Msg    string `json:"msg"`
+	Detail string `json:"detail,omitempty"`
+	Data   any    `json:"data"`
 }
 
 func File(b []byte) response.File {
@@ -28,12 +29,25 @@ func Data(data any) response.Raw {
 	}
 }
 
-func Error(code int, msg string) response.Raw {
+func Error(code int, msg, detail string) response.Raw {
 	return response.Raw{
 		Data: resp{
-			Code: code,
-			Msg:  msg,
-			Data: "",
+			Code:   code,
+			Msg:    msg,
+			Detail: detail,
+			Data:   "",
 		},
 	}
 }
+
+// UpdatePostStatusCode 把gofr框架默认post请求返回201更新为200
+// func UpdatePostStatusCode() func(inner http.Handler) http.Handler {
+// 	return func(inner http.Handler) http.Handler {
+// 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// 			inner.ServeHTTP(w, r)
+// 			if r.Method == http.MethodPost {
+// 				w.WriteHeader(http.StatusOK)
+// 			}
+// 		})
+// 	}
+// }

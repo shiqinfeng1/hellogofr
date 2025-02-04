@@ -6,15 +6,19 @@ package route
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/shiqinfeng1/hellogofr/pkg/openapi"
 	"github.com/shiqinfeng1/hellogofr/pkg/response"
+	"go.opentelemetry.io/otel/trace"
 
-	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/goai"
 	"github.com/gogf/gf/v2/util/gmeta"
+	"github.com/gogf/gf/v2/util/gvalid"
 	"gofr.dev/pkg/gofr"
 )
+
+var validator *gvalid.Validator = gvalid.New()
 
 func BindOpenapiHandler(app *gofr.App) {
 	app.GET("/openapi.json", func(ctx *gofr.Context) (interface{}, error) {
@@ -26,7 +30,6 @@ func BindHandler[Req any, Res any](app *gofr.App, handler func(*gofr.Context, *R
 	var req Req
 	method := gmeta.Get(req, "method").String()
 	path := gmeta.Get(req, "path").String()
-
 	// 绑定uri和处理函数
 	switch method {
 	case "post":
@@ -47,15 +50,18 @@ func gofrApiWrap[Req any, Res any](handler func(*gofr.Context, *Req) (*Res, erro
 		var req Req
 		// 提取请求参数
 		if err := ctx.Bind(&req); err != nil {
-			return nil, err
+			return response.Error(http.StatusBadRequest, "Bind parameter fail", err.Error()), nil
 		}
+		// 提取traceid
+		traceID := trace.SpanFromContext(ctx).SpanContext().TraceID().String()
+		ctx.Logf("%v req:%+v ", traceID, req)
 		// 校验参数合法性
-		if err := g.Validator().Data(&req).Run(ctx); err != nil {
-			return response.Error(err.Code().Code(), err.Error()), nil
+		if err := validator.Data(&req).Run(ctx); err != nil {
+			return response.Error(http.StatusBadRequest, http.StatusText(http.StatusBadRequest), err.Error()), nil
 		}
 		res, err := handler(ctx, &req)
 		if err != nil {
-			return response.Error(1, err.Error()), nil
+			return response.Error(11, http.StatusText(http.StatusInternalServerError), err.Error()), nil
 		}
 		return response.Data(res), nil
 	}
