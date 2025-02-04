@@ -1,11 +1,16 @@
+// Copyright @2025-2028 <SieYuan> . All rights reserved.
+// Use of this source code is governed by a MIT style
+// license that can be found in the LICENSE file.
+
 package route
 
 import (
 	"context"
 
-	"hellogofr/pkg/openapi"
-	"hellogofr/pkg/response"
+	"github.com/shiqinfeng1/hellogofr/pkg/openapi"
+	"github.com/shiqinfeng1/hellogofr/pkg/response"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/goai"
 	"github.com/gogf/gf/v2/util/gmeta"
 	"gofr.dev/pkg/gofr"
@@ -37,13 +42,18 @@ func BindHandler[Req any, Res any](app *gofr.App, handler func(*gofr.Context, *R
 	})
 }
 
-func gofrApiWrap[Req any, Res any](do func(*gofr.Context, *Req) (*Res, error)) func(*gofr.Context) (interface{}, error) {
+func gofrApiWrap[Req any, Res any](handler func(*gofr.Context, *Req) (*Res, error)) func(*gofr.Context) (interface{}, error) {
 	return func(ctx *gofr.Context) (interface{}, error) {
 		var req Req
+		// 提取请求参数
 		if err := ctx.Bind(&req); err != nil {
 			return nil, err
 		}
-		res, err := do(ctx, &req)
+		// 校验参数合法性
+		if err := g.Validator().Data(&req).Run(ctx); err != nil {
+			return response.Error(err.Code().Code(), err.Error()), nil
+		}
+		res, err := handler(ctx, &req)
 		if err != nil {
 			return response.Error(1, err.Error()), nil
 		}
