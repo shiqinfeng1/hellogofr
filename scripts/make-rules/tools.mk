@@ -71,18 +71,23 @@ install.go-mod-outdated:
 # install.gotests:
 # 	@$(GO) install github.com/cweill/gotests/gotests@latest
 
-# .PHONY: install.buf
-# install.buf:
-# 	@curl -sSL "https://github.com/bufbuild/buf/releases/download/v$(BUF_VERSION)/buf-$(HOST_OS)-$(HOST_ARCH)" --progress-bar -o "$(BIN)/buf"
-# 	@chmod +x "$(BIN)/buf"
+.PHONY: install.buf
+install.buf:
+	@curl -sSL "https://github.com/bufbuild/buf/releases/download/v$(BUF_VERSION)/buf-$(HOST_OS)-$(HOST_ARCH)" --progress-bar -o "$(BIN)/buf"
+	@chmod +x "$(BIN)/buf"
 
-# .PHONY: install.protoc-gen-go
-# install.protoc-gen-go:
-# 	@$(GO) install github.com/golang/protobuf/protoc-gen-go@latest
+.PHONY: install.gofr
+install.gofr:
+	@$(GO) install gofr.dev/cli/gofr@latest
 
-# .PHONY: install.protoc-gen-go-grpc
-# install.protoc-gen-go-grpc:
-# 	@$(GO) install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+.PHONY: install.protoc-gen-go
+install.protoc-gen-go:
+	@$(GO) install github.com/golang/protobuf/protoc-gen-go@latest
+
+.PHONY: install.protoc-gen-go-grpc
+install.protoc-gen-go-grpc:
+	@$(GO) install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 # .PHONY: install.protoc-gen-go-http
 # install.protoc-gen-go-http:

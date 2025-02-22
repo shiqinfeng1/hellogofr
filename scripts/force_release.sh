@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Copyright @2025-2028 <SieYuan> . All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+
 IAM_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 source "${IAM_ROOT}/scripts/lib/init.sh"
 

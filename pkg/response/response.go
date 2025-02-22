@@ -5,6 +5,9 @@
 package response
 
 import (
+	"bytes"
+	"net/http"
+
 	"gofr.dev/pkg/gofr/http/response"
 )
 
@@ -40,14 +43,27 @@ func Error(code int, msg, detail string) response.Raw {
 	}
 }
 
-// UpdatePostStatusCode 把gofr框架默认post请求返回201更新为200
-// func UpdatePostStatusCode() func(inner http.Handler) http.Handler {
-// 	return func(inner http.Handler) http.Handler {
-// 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 			inner.ServeHTTP(w, r)
-// 			if r.Method == http.MethodPost {
-// 				w.WriteHeader(http.StatusOK)
-// 			}
-// 		})
-// 	}
-// }
+// responseWriter 自定义响应写入器，用于捕获响应数据
+type responseWriter struct {
+	http.ResponseWriter
+	buf bytes.Buffer
+}
+
+func (lrw *responseWriter) Write(b []byte) (int, error) {
+	// 将响应数据写入缓冲区
+	return lrw.buf.Write(b)
+}
+
+// Logging is a middleware which logs response status and time in milliseconds along with other data.
+func BuildResponse() func(inner http.Handler) http.Handler {
+	return func(inner http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			srw := &responseWriter{ResponseWriter: w}
+
+			defer func(res *responseWriter, req *http.Request) {
+			}(srw, r)
+
+			inner.ServeHTTP(srw, r)
+		})
+	}
+}

@@ -20,7 +20,7 @@ include scripts/make-rules/golang.mk
 # include scripts/make-rules/image.mk
 # include scripts/make-rules/deploy.mk
 include scripts/make-rules/copyright.mk
-# include scripts/make-rules/gen.mk
+include scripts/make-rules/gen.mk
 include scripts/make-rules/release.mk
 include scripts/make-rules/dependencies.mk
 include scripts/make-rules/tools.mk

@@ -59,7 +59,7 @@ else
 endif
 
 # Linux command settings
-FIND := find . ! -path './third_party/*' ! -path './vendor/*'
+# FIND := find . ! -path './third_party/*' ! -path './vendor/*'
 ifeq ($(GOOS),linux)
 	XARGS := xargs --no-run-if-empty
 endif
@@ -81,7 +81,7 @@ COPY_GITHOOK:=$(shell cp -f scripts/githooks/* .git/hooks/)
 # Missing CRITICAL_TOOLS can lead to some necessary operations failed. i.e. `make release` failed.
 # TRIVIAL_TOOLS are Optional tools, missing these tool have no affect.
 BLOCKER_TOOLS ?= go-junit-report golangci-lint addlicense gsemver # golines goimports codegen
-CRITICAL_TOOLS ?= go-gitlint go-mod-outdated git-chglog github-release  #swagger mockgen gotests  protoc-gen-go protoc-gen-go-grpc protoc-gen-go-http protoc-gen-go-errors protoc-gen-validate protoc-gen-openapi  wire buf # coscmd
+CRITICAL_TOOLS ?= go-gitlint go-mod-outdated git-chglog github-release protoc-gen-go protoc-gen-go-grpc buf gofr #swagger mockgen gotests   protoc-gen-go-http protoc-gen-go-errors protoc-gen-validate protoc-gen-openapi  wire  # coscmd
 TRIVIAL_TOOLS ?= #depth go-callvis gothanks richgo rts kube-score
 
 COMMA := ,
